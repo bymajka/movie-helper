@@ -4,6 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "../ui
 import { useEffect, useMemo, useState } from "react";
 import { useTrending } from "@/hooks/useTranding";
 import { CarouselCard } from "./CarouselCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const MovieSwiper = () => {
     const [api, setApi] = useState<CarouselApi | null>(null);
@@ -41,10 +42,11 @@ const MovieSwiper = () => {
         return () => clearInterval(iv)
       }, [api])
 
-      if (loading) return <div>Loading...</div>
+      if (loading) return <div>
+        <Skeleton className="w-full md:mt-6 md:h-[560px] rounded-2xl bg-card" />
+      </div>
       if (error) return <div>Error: {error}</div>
 
-    
     return (
         <div className="relative rounded-2xl overflow-hidden md:mt-6">
             <Carousel
