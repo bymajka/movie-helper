@@ -1,8 +1,6 @@
 import "../globals.css";
 import { TopNavBar } from "@/components/Header/TopNavBar";
 import { FilterPanel } from "@/components/Sidebar/FilterPanel";
-import { MovieSwiper } from "@/components/Hero/MovieSwiper";
-import { TrendingSection } from "@/components/ContentSection/TrendingSection/TrendingSection";
 
 export default function AppShellLayout({
   children,
