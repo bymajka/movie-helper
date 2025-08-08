@@ -1,6 +1,7 @@
 import { fetchDiscover, TrendingItem } from "@/lib/tmdb"
 import { SectionCard } from "@/components/ContentSection/SectionCard"
 import { notFound } from "next/navigation"
+import { FiltersBar } from "@/components/FilterSection/FiltersBar"
 
 interface DiscoverPageProps {
     searchParams: {
@@ -39,7 +40,7 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
 
     return (
         <section className="md:mt-6 flex flex-col gap-6">
-
+          <FiltersBar />
           {allResults.length === 0 ? (
             <p className="text-primary">No results found</p>
           ) : (

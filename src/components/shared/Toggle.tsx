@@ -9,16 +9,22 @@ interface ToggleProps {
     className?: string;
     withCloseIcon?: boolean;
     onPressChange?: () => void;
+    isActive?: boolean;
 }
 
-export function Toggle({ children, className, withCloseIcon = false, onPressChange }: ToggleProps) {
-  const [isActive, setIsActive] = useState(false);
+export function Toggle({ children, className, withCloseIcon = false, onPressChange, isActive: externalIsActive }: ToggleProps) {
+  const [internalIsActive, setInternalIsActive] = useState(false);
+  
+  // Use external state if provided, otherwise use internal state
+  const isActive = externalIsActive !== undefined ? externalIsActive : internalIsActive;
 
   return (
     <ToggleUI
       pressed={isActive}
       onPressedChange={() => {
-        setIsActive(!isActive);
+        if (externalIsActive === undefined) {
+          setInternalIsActive(!internalIsActive);
+        }
         onPressChange?.();
       }}
       className={`
