@@ -5,11 +5,12 @@ import { ReactNode } from "react";
 interface ContentSectionProps {
     title: string
     children: ReactNode
+    className?: string
 }
 
-const ContentSection: React.FC<ContentSectionProps> = ({title, children}) => {
+const ContentSection: React.FC<ContentSectionProps> = ({title, children, className}) => {
     return (
-        <section className="flex flex-col gap-4">
+        <section className={`flex flex-col gap-4 ${className}`}>
             <div className="flex flex-row justify-between items-center">
                 <h2 className="text-primary text-2xl font-semibold">
                     {title}

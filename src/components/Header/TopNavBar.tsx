@@ -18,7 +18,7 @@ const TopNavBar = () => {
                 </Button>
             </Link>
             <div className="flex-1 h-full"> 
-                <Search placeholder="Search" className="w-full h-full bg-card border-none focus-visible:ring-0 placeholder:text-primary" />
+                <Search placeholder="Search" className="w-full h-full border-none focus-visible:ring-0 placeholder:text-primary" />
             </div>
             
             <Button 
