@@ -16,7 +16,8 @@ export const CarouselCard = ({ item }: CarouselCardProps) => {
 
     const genreMap = item.media_type === 'movie' ? maps.movie : maps.tv;
 
-    if (loading) return <div>Loading...</div>
+    if(loading) return
+
     if (error) return <div>Error: {error}</div>
 
     return (

@@ -40,6 +40,24 @@ export interface DiscoverOptions {
     language?: string;
 }
 
+export interface SearchResult {
+    id: number;
+    media_type: 'movie' | 'tv' | 'person';
+    title?: string;
+    name?:     string       // for TV & people
+    overview?: string
+    profile_path?: string   // for people
+    poster_path?: string
+    backdrop_path?: string
+    genre_ids?: number[]
+}
+
+export interface SearchMultiOptions {
+    query?: string;
+    page?: number;
+    language?: string;
+}
+
 export const TMDB_BASE_IMG_URL = 'https://image.tmdb.org/t/p/original';
 export const TMDB_BASE_IMG_URL_W500 = 'https://image.tmdb.org/t/p/w500';
 
@@ -99,4 +117,18 @@ export async function fetchDiscover({
       { params }
     )
     return data.results
+}
+
+export async function fetchSearchMulti({
+    query, 
+    page = 1,
+    language = 'en-US'
+}: SearchMultiOptions = {}): Promise<{results: TrendingItem[]; total_pages: number}> {
+    const { data } = await tmdb.get<{
+        results: TrendingItem[]
+        total_pages: number
+      }>('/search/multi', {
+        params: { query, page, language, include_adult: false },
+      })
+      return { results: data.results, total_pages: data.total_pages }
 }

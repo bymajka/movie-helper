@@ -17,7 +17,7 @@ export const SectionCard = ({item, className}: SectionCardProps) => {
     const {genres} = useMovieGenres();
 
     const genre = useMemo(() => {
-        return genres.find(g => item.genre_ids.includes(g.id))?.name;
+        return genres.find(g => item.genre_ids?.includes(g.id))?.name;
     }, [genres, item.genre_ids]);
 
     return (
@@ -29,6 +29,7 @@ export const SectionCard = ({item, className}: SectionCardProps) => {
                     src={`${TMDB_BASE_IMG_URL_W500}${item.backdrop_path}`}
                     alt={item.title || item.name || ''}
                     fill
+                    sizes="(max-width: 639px) 50vw, 25vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                     /> : <FallbackCardImage />}
         
