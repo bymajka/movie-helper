@@ -1,7 +1,8 @@
 import { fetchDiscover, TrendingItem } from "@/lib/tmdb"
-import { SectionCard } from "@/components/ContentSection/SectionCard"
 import { notFound } from "next/navigation"
 import { FiltersBar } from "@/components/FilterSection/FiltersBar"
+import { DiscoverVirtualGrid } from "@/components/Discover/DiscoverVirtualGrid"
+import { ContentSection } from "@/components/ContentSection/ContentSection"
 
 interface DiscoverPageProps {
     searchParams: {
@@ -19,7 +20,6 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
       with_genres:      searchParams.genres?.split(',').map(Number).filter(Boolean),
       'vote_average.gte': Number(searchParams.rating_gte) || 0,
       'vote_average.lte': Number(searchParams.rating_lte) || 10,
-      page: Number(searchParams.page) || 1,
     }
 
     let allResults: TrendingItem[] = [];
@@ -39,17 +39,15 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
     }
 
     return (
-        <section className="md:mt-6 flex flex-col gap-6">
+        <ContentSection  className="flex flex-col gap-6 flex-1" withButton={false}>
           <FiltersBar />
           {allResults.length === 0 ? (
-            <p className="text-primary">No results found</p>
+              <div className="flex-1 text-primary text-2xl font-semibold flex items-center justify-center h-full">
+                  No results found 
+              </div>
           ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {allResults.map((item) => (
-              <SectionCard key={item.id} item={item} />
-            ))}
-          </div>
+              <DiscoverVirtualGrid initialItems={allResults} />
           )}
-        </section>
+        </ContentSection>
     )
 }
