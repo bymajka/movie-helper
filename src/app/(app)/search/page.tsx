@@ -1,7 +1,7 @@
 import { ContentSection } from "@/components/ContentSection/ContentSection";
-import { SectionCard } from "@/components/ContentSection/SectionCard";
 import { fetchSearchMulti, TrendingItem } from "@/lib/tmdb";
 import { notFound } from "next/navigation";
+import { SearchVirtualGrid } from "@/components/Search/SearchVirtualGrid";
 
 interface SearchPageProps {
     searchParams: {query?: string; page?: string;}
@@ -29,14 +29,8 @@ export const SearchPage = async ({searchParams}: SearchPageProps) => {
     }
 
     return (
-        <ContentSection title={`Search results for “${q}”`} className="mt-6">
-            <div className="grid md:grid-cols-3 gap-6">
-                {results?.map((item) => {
-                    return (
-                        <SectionCard key={`${item.id}-${item.title || item.name}`} item={item} />
-                    )
-                })}
-            </div>
+        <ContentSection title={`Search results for “${q}”`} className="mt-6" withButton={false}>
+            <SearchVirtualGrid initialItems={results} query={q} />
         </ContentSection>
     )
 }
