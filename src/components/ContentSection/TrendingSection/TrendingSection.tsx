@@ -4,6 +4,7 @@ import { ContentSection } from "@/components/ContentSection/ContentSection";
 import { useTrending } from "@/hooks/useTranding";
 import { SectionCard } from "../SectionCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 export const TrendingSection = () => {
     const {items,loading,error} = useTrending({
@@ -31,7 +32,9 @@ export const TrendingSection = () => {
             <div className="grid md:grid-cols-3 gap-6">
                 {items.map((item) => {
                     return (
-                        <SectionCard key={`${item.id}-${item.title || item.name}`} item={item} />
+                        <Link href={`/${item.media_type}/${item.id}`} key={`${item.id}-${item.title || item.name}`}>
+                            <SectionCard item={item} />
+                        </Link>
                     )
                 })}
             </div>

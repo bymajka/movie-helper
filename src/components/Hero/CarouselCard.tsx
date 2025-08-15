@@ -5,6 +5,7 @@ import { Toggle } from "@/components/shared/Toggle";
 import { TbHeartFilled } from "react-icons/tb";
 import Button from "@/components/shared/Button";
 import { useAllGenres } from "@/hooks/useAllGenres";
+import Link from "next/link";
 
 interface CarouselCardProps {
     item: TrendingItem;
@@ -54,11 +55,13 @@ export const CarouselCard = ({ item }: CarouselCardProps) => {
                         </span>
                         <TbHeartFilled className="w-6 h-6" />
                     </Toggle>
-                    <Button variant="secondary" className="cursor-pointer rounded-[30px] px-5 py-3 bg-primary/50 text-primary-foreground border-none">
-                        <span className="text-primary">
-                            Details
-                        </span>
-                    </Button>
+                    <Link href={`/movie/${item.id}`}>
+                        <Button variant="secondary" className="cursor-pointer rounded-[30px] px-5 py-3 bg-primary/50 text-primary-foreground border-none">
+                            <span className="text-primary">
+                                Details
+                            </span>
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </>
