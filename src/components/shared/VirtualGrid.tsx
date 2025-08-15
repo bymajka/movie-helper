@@ -4,6 +4,7 @@ import { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { TrendingItem } from "@/lib/tmdb";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { SectionCard } from "../ContentSection/SectionCard";
+import Link from "next/link";
 
 interface VirtualGridProps {
     initialItems: TrendingItem[];
@@ -140,7 +141,9 @@ export const VirtualGrid = ({
                         >
                             <div className="grid grid-cols-3 gap-4">
                                 {row.map(item => (
-                                    <SectionCard key={item.id} item={item} />
+                                    <Link href={`/${item.media_type}/${item.id}`} key={`${item.id} link`}>
+                                        <SectionCard key={item.id} item={item} />
+                                    </Link>
                                 ))}
                                 {row.length < 3 &&
                                     Array.from({ length: 3 - row.length }).map((_, i) => (

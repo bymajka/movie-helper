@@ -4,9 +4,9 @@ import { TrendingItem, TMDB_BASE_IMG_URL_W500 } from "@/lib/tmdb";
 import { useMovieGenres } from "@/hooks/useMovieGenres";
 import { useMemo } from "react";
 import Image from "next/image";
-import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { FallbackCardImage } from "../shared/FallbackCardImage";
+import { Rating } from "@/components/shared/Rating";
 
 interface SectionCardProps {
     item: TrendingItem
@@ -48,10 +48,7 @@ export const SectionCard = ({item, className}: SectionCardProps) => {
                     </h3>
                     
                     {/* Rating */}
-                    <div className="flex items-center gap-0.5 mb-3">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="text-primary text-sm font-medium">{item.vote_average?.toFixed(1)}</span>
-                    </div>
+                    <Rating className="mb-3" rating={item?.vote_average || undefined} />
                 </div>
                             
                     {/* Description */}
