@@ -10,6 +10,7 @@ import Button from "@/components/shared/Button";
 import { Toggle } from "@/components/shared/Toggle";
 import { useEffect, useMemo } from "react";
 import { useFilterStore } from "@/stores/filterStore";
+import { debounce } from "lodash";
 
 import Link from "next/link";
 
@@ -39,13 +40,27 @@ const FilterPanel = ({className}: {className?: string}) => {
 
     const handleMinRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = parseFloat(e.target.value);
-        if (!isNaN(v) && v >= 1 && v <= rating_lte) setMinRating(v);
+        debouncedSetMinRating(v);
     }
+
+    const debouncedSetMinRating = useMemo(
+        () => debounce((v: number) => {
+            if (!isNaN(v) && v >= 1 && v <= rating_lte) setMinRating(v);
+        }, 300),
+        [setMinRating, rating_lte]
+    );
 
     const handleMaxRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = parseFloat(e.target.value);
-        if (!isNaN(v) && v >= rating_gte && v <= 10) setMaxRating(v);
+        debouncedSetMaxRating(v);
     }
+
+    const debouncedSetMaxRating = useMemo(
+        () => debounce((v: number) => {
+            if (!isNaN(v) && v >= rating_gte && v <= 10) setMaxRating(v);
+        }, 300),
+        [setMaxRating, rating_gte]
+    );
 
     const isDisabled = useMemo(() => {
         const ratingIsDefault = Number(rating_gte) === 1 && Number(rating_lte) === 10;
