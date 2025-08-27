@@ -1,12 +1,20 @@
+"use client";
 import Button from "../shared/Button";
 import {Home, Bell} from "lucide-react";
 import {Search} from "@/components/shared/Search";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { TMDBConnectButton } from "./TMDBConnectButton";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { useAuth } from "@/components/providers/AuthProvider";
 import Link from "next/link";
+import { useEffect } from "react";
 
 const USER_NAME = "John Doe";
 
 const TopNavBar = () => {
+    const { user } = useAuth();
+    const userName = user?.user_metadata.name;
+    const userEmail = user?.email;
+
     return (
         <header className="flex h-14 w-full items-center gap-4"> 
             <Link href="/" passHref className="h-full">
@@ -28,16 +36,12 @@ const TopNavBar = () => {
                 <Bell size={24} className="text-primary" />
             </Button>
             
-            <Button 
-                variant="secondary" 
-                className="rounded-full h-full w-auto px-1 pr-4 flex items-center gap-2.5 bg-card"
-            >
+            <TMDBConnectButton isConnected={false} onDisconnect={() => {}}>
                 <Avatar className="w-12 h-12">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <span className="text-sm">{USER_NAME}</span>
-            </Button>
+                    <AvatarFallback>{userName?.split(" ")[0].charAt(0) ?? userEmail?.split("@")[0].charAt(0).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm">{userName ?? userEmail?.split("@")[0]}</span>
+            </TMDBConnectButton>
         </header>
     )
 }
