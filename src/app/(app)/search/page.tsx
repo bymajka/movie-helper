@@ -1,38 +1,26 @@
-import { ContentSection } from "@/components/ContentSection/ContentSection";
-import { fetchSearchMulti, TrendingItem } from "@/lib/tmdb";
 import { notFound } from "next/navigation";
-import { SearchVirtualGrid } from "@/components/Search/SearchVirtualGrid";
+import { SearchView } from "@/views";
+import { fetchSearchMulti, type SearchResponse } from "@/services/search";
+import type { TrendingItem } from "@/services/media";
 
 interface SearchPageProps {
-    searchParams: {query?: string; page?: string;}
+    searchParams: { query?: string; page?: string; }
 }
 
-export const SearchPage = async ({searchParams}: SearchPageProps) => {
+export default async function SearchPage({ searchParams }: SearchPageProps) {
     const q = searchParams.query?.trim();
-    if(!q) {
-        return <div>No found</div>
+    if (!q) {
+        return <div>No search query provided</div>;
     }
 
-    let data: { results: TrendingItem[] }
+    let data: SearchResponse;
     try {
-        data = await fetchSearchMulti({query: q, page: Number(searchParams.page) || 1})
+        data = await fetchSearchMulti({ query: q, page: Number(searchParams.page) || 1 });
     } catch {
-        notFound();
+        return notFound();
     }
 
-    const results = data.results
+    const results = data.results as TrendingItem[];
 
-    if(results.length === 0) {
-        return <div className="text-primary text-2xl font-semibold flex items-center justify-center h-full">
-            No results found 
-        </div>
-    }
-
-    return (
-        <ContentSection title={`Search results for “${q}”`} className="mt-6" withButton={false}>
-            <SearchVirtualGrid initialItems={results} query={q} />
-        </ContentSection>
-    )
+    return <SearchView query={q} initialItems={results} />;
 }
-
-export default SearchPage;

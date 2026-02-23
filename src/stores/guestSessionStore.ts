@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import axios from "axios";
+import { createGuestSession } from "@/services/auth";
 
 interface GuestSessionStore {
     sessionId: string | null;
@@ -27,16 +27,7 @@ export const useGuestSessionStore = create<GuestSessionStore>()(
                 set({ initializing: true });
 
                 try {
-                    const res = await axios.get(
-                      `https://api.themoviedb.org/3/authentication/guest_session/new`, 
-                      {
-                        headers: {
-                            accept: "application/json",
-                            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
-                        }
-                      }
-                    )
-                    const { guest_session_id, expires_at } = res.data
+                    const { guest_session_id, expires_at } = await createGuestSession();
                     set({
                       sessionId: guest_session_id,
                       expiresAt: expires_at,

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { fetchGenres, Genre } from "@/lib/tmdb";
+import { fetchGenres, type Genre } from "@/services/media";
 
 interface MediaType {
     label: string;
