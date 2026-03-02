@@ -3,7 +3,7 @@
 import { Search as SearchIcon } from "lucide-react";
 import { Input } from "@/shared/components/input";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { debounce } from "lodash";
 
 interface SearchProps {
@@ -16,14 +16,6 @@ export const Search = ({ placeholder, className }: SearchProps) => {
   const params = useSearchParams();
   const urlQuery = params.get("query") ?? "";
   const [q, setQ] = useState(urlQuery);
-  const isUserInput = useRef(false);
-
-  useEffect(() => {
-    if (!isUserInput.current) {
-      setQ(urlQuery);
-    }
-    isUserInput.current = false;
-  }, [urlQuery]);
 
   const debouncedRoute = useMemo(
     () =>
@@ -39,11 +31,11 @@ export const Search = ({ placeholder, className }: SearchProps) => {
   );
 
   useEffect(() => {
-    return () => debouncedRoute.cancel();
-  }, [debouncedRoute]);
+    debouncedRoute.cancel();
+    setQ(urlQuery);
+  }, [urlQuery, debouncedRoute]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    isUserInput.current = true;
     const value = e.target.value;
     setQ(value);
     debouncedRoute(value);
