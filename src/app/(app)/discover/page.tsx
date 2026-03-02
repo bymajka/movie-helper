@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { isAxiosError } from "axios";
 import { DiscoverView } from "@/views";
 import {
   fetchDiscoverMovies,
@@ -40,8 +41,11 @@ export default async function DiscoverPage({
       }),
     );
     allResults = results.flat() as TrendingItem[];
-  } catch {
-    return notFound();
+  } catch (err) {
+    if (isAxiosError(err) && err.response?.status === 404) {
+      return notFound();
+    }
+    throw err;
   }
 
   return <DiscoverView initialItems={allResults} />;
