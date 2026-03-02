@@ -30,14 +30,16 @@ export const HeroCarousel = () => {
 
   const slides = useMemo(
     () =>
-      items.map((item) => {
-        const genreMap = item.media_type === "movie" ? maps.movie : maps.tv;
-        return (
-          <CarouselItem key={item.id} className="relative">
-            <CarouselCard item={item} genreMap={genreMap} />
-          </CarouselItem>
-        );
-      }),
+      items
+        .filter((item) => item.media_type === "movie" || item.media_type === "tv")
+        .map((item) => {
+          const genreMap = item.media_type === "movie" ? maps.movie : maps.tv;
+          return (
+            <CarouselItem key={`${item.media_type}-${item.id}`} className="relative">
+              <CarouselCard item={item} genreMap={genreMap} />
+            </CarouselItem>
+          );
+        }),
     [items, maps],
   );
 

@@ -50,7 +50,7 @@ export const CarouselCard = ({ item, genreMap }: CarouselCardProps) => {
             <span>Add to Favorites</span>
             <TbHeartFilled className="w-6 h-6" />
           </Toggle>
-          <Link href={`/movie/${item.id}`}>
+          <Link href={`/${item.media_type}/${item.id}`}>
             <Button
               variant="secondary"
               className="cursor-pointer rounded-[30px] px-5 py-3 bg-primary/50 text-primary-foreground border-none"

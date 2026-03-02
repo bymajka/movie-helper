@@ -10,15 +10,15 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
-  const { sessionId, isLoading } = useUserAuthStore();
+  const { sessionId, isLoading, hasHydrated } = useUserAuthStore();
 
   useEffect(() => {
-    if (!isLoading && !sessionId) {
+    if (hasHydrated && !isLoading && !sessionId) {
       router.replace("/");
     }
-  }, [sessionId, isLoading, router]);
+  }, [sessionId, isLoading, hasHydrated, router]);
 
-  if (isLoading) {
+  if (!hasHydrated || isLoading) {
     return null;
   }
 

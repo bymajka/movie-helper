@@ -3,7 +3,7 @@
 import { Search as SearchIcon } from "lucide-react";
 import { Input } from "@/shared/components/input";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { debounce } from "lodash";
 
 interface SearchProps {
@@ -14,21 +14,40 @@ interface SearchProps {
 export const Search = ({ placeholder, className }: SearchProps) => {
   const router = useRouter();
   const params = useSearchParams();
-  const [q, setQ] = useState(params.get("query") ?? "");
+  const urlQuery = params.get("query") ?? "";
+  const [q, setQ] = useState(urlQuery);
+  const isUserInput = useRef(false);
+
+  useEffect(() => {
+    if (!isUserInput.current) {
+      setQ(urlQuery);
+    }
+    isUserInput.current = false;
+  }, [urlQuery]);
 
   const debouncedRoute = useMemo(
     () =>
       debounce((v: string) => {
         const val = v.trim();
-        if (val) router.replace(`/search?query=${encodeURIComponent(val)}`);
+        if (val) {
+          router.replace(`/search?query=${encodeURIComponent(val)}`);
+        } else {
+          router.replace("/search");
+        }
       }, 300),
     [router],
   );
 
   useEffect(() => {
-    debouncedRoute(q);
     return () => debouncedRoute.cancel();
-  }, [q, debouncedRoute]);
+  }, [debouncedRoute]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    isUserInput.current = true;
+    const value = e.target.value;
+    setQ(value);
+    debouncedRoute(value);
+  };
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +61,7 @@ export const Search = ({ placeholder, className }: SearchProps) => {
         type="search"
         value={q}
         placeholder={placeholder}
-        onChange={(e) => setQ(e.target.value)}
+        onChange={handleChange}
         className={`${className} bg-card! flex items-center gap-2 rounded-full px-5 py-[18px] h-full`}
       />
       {!q && (

@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { SearchView } from "@/views";
 import { fetchSearchMulti, type SearchResponse } from "@/services/search";
 import type { TrendingItem } from "@/services/media";
@@ -12,7 +12,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const q = params.query?.trim();
 
   if (!q) {
-    return <div>No search query provided</div>;
+    redirect("/discover?rating_gte=1&rating_lte=10");
   }
 
   let data: SearchResponse;
