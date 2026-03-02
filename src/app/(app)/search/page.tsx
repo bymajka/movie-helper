@@ -36,10 +36,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const rawPage = Array.isArray(params.page) ? params.page[0] : params.page;
   const parsedPage = Number.parseInt(rawPage ?? "", 10);
-  const page =
-    Number.isNaN(parsedPage) || parsedPage <= 0 || !Number.isInteger(parsedPage)
-      ? 1
-      : parsedPage;
+  const page = Number.isNaN(parsedPage) || parsedPage <= 0 ? 1 : parsedPage;
 
   let data;
   try {
