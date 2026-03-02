@@ -3,13 +3,15 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { ChevronRight, ChevronLeft } from "lucide-react";
-import { Breadcrumb } from "@/shared/components/breadcrumb";
-import { Card } from "@/shared/components/card";
-import { Badge } from "@/shared/components/badge";
-import { Button } from "@/shared/components/button";
-import { Skeleton } from "@/shared/components/skeleton";
-import { CarouselApi } from "@/shared/components/carousel";
-import { Rating } from "@/shared/components/Rating";
+import {
+  Card,
+  Badge,
+  Button,
+  Skeleton,
+  CarouselApi,
+  Rating,
+  Breadcrumb,
+} from "@/shared/components";
 import { TrailerPlaceholder } from "./TrailerPlaceholder";
 import { CastCarousel } from "@/views/movie/CastCarousel";
 import { extractYear, formatRuntime } from "@/shared/utils";
@@ -18,6 +20,8 @@ import {
   type Credits,
   TMDB_BASE_IMG_URL,
 } from "@/services/media";
+import { useMovieAccountStates } from "@/services/account";
+import { useUserAuthStore } from "@/stores/userAuthStore";
 
 interface MovieViewProps {
   id: number;
@@ -25,6 +29,8 @@ interface MovieViewProps {
 
 export const MovieView = ({ id }: MovieViewProps) => {
   const { details, loading, error } = useMovieDetails(id);
+  const { sessionId } = useUserAuthStore();
+  const { data: accountStates } = useMovieAccountStates(id, sessionId);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const [api, setApi] = useState<CarouselApi | null>(null);
 
@@ -98,6 +104,8 @@ export const MovieView = ({ id }: MovieViewProps) => {
           ) : (
             <TrailerPlaceholder
               backdropPath={details?.backdrop_path}
+              movieId={id}
+              initialFavorite={accountStates?.favorite ?? false}
               onPlay={() => setIsTrailerOpen(true)}
             />
           )}

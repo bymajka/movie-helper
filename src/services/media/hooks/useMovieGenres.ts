@@ -9,15 +9,18 @@ export const useMovieGenres = (opts?: GenresOptions) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const mediaType = opts?.mediaType;
+    const language = opts?.language;
+
     useEffect(() => {
         setLoading(true);
         setError(null);
 
-        fetchGenres(opts)
+        fetchGenres({ mediaType, language })
             .then(setGenres)
             .catch((err) => setError(err.message))
             .finally(() => setLoading(false));
-    }, [opts?.mediaType, opts?.language]);
+    }, [mediaType, language]);
 
     return { genres, loading, error };
 };

@@ -13,9 +13,11 @@ export * from "./toggle";
 
 // Custom shared components
 export { default as Logo } from "./Logo";
+export * from "./AppShell";
 export * from "./FallbackCardImage";
 export * from "./Rating";
 export * from "./SectionCard";
+export * from "./PosterCard";
 export * from "./ContentSection";
 export * from "../../views/movie/TrailerPlaceholder";
 export * from "../../views/movie/CastCarousel";

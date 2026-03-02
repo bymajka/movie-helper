@@ -9,15 +9,18 @@ export const useTvDetails = (id: number, opts?: Omit<DetailsOptions, 'id'>) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const language = opts?.language;
+    const region = opts?.region;
+
     useEffect(() => {
         setLoading(true);
         setError(null);
 
-        fetchTvDetails({ id, ...opts })
+        fetchTvDetails({ id, language, region })
             .then(setDetails)
             .catch((err) => setError(err.message))
             .finally(() => setLoading(false));
-    }, [id, opts?.language, opts?.region]);
+    }, [id, language, region]);
 
     return { details, loading, error };
 };

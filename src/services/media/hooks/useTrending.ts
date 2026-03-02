@@ -9,15 +9,19 @@ export const useTrending = (opts?: TrendingOptions, limit?: number) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const mediaType = opts?.mediaType;
+    const timeWindow = opts?.timeWindow;
+    const language = opts?.language;
+
     useEffect(() => {
         setLoading(true);
         setError(null);
 
-        fetchTrending(opts)
+        fetchTrending({ mediaType, timeWindow, language })
             .then((data) => setItems(limit ? data.slice(0, limit) : data))
             .catch((err) => setError(err.message))
             .finally(() => setLoading(false));
-    }, [opts?.mediaType, opts?.timeWindow, opts?.language, limit]);
+    }, [mediaType, timeWindow, language, limit]);
 
     return { items, loading, error };
 };

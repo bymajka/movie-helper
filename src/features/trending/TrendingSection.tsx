@@ -10,10 +10,16 @@ import { useMemo, useRef } from "react";
 
 const MIN_CARD_WIDTH = 300;
 const GAP = 16;
+const DEFAULT_COLUMNS = 3;
 
 export const TrendingSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const columns = useResponsiveColumns(containerRef, { minColumnWidth: MIN_CARD_WIDTH, gap: GAP });
+  const columns = useResponsiveColumns(containerRef, {
+    minColumnWidth: MIN_CARD_WIDTH,
+    gap: GAP,
+  });
+
+  const limit = columns ?? DEFAULT_COLUMNS;
   const {
     items,
     loading: trendingLoading,
@@ -23,7 +29,7 @@ export const TrendingSection = () => {
       mediaType: "all",
       timeWindow: "week",
     },
-    columns ?? undefined,
+    limit,
   );
 
   const {
@@ -32,7 +38,7 @@ export const TrendingSection = () => {
     error: genresError,
   } = useMovieGenres();
 
-  const loading = trendingLoading || genresLoading;
+  const loading = trendingLoading || genresLoading || columns === null;
   const error = trendingError || genresError;
 
   const getGenreName = useMemo(() => {
@@ -45,17 +51,17 @@ export const TrendingSection = () => {
   if (loading)
     return (
       <div ref={containerRef}>
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-between items-center mb-4">
           <Skeleton className="md:h-8 md:w-[150px] rounded-2xl bg-card" />
           <Skeleton className="md:h-10 md:w-[85px] rounded-full bg-card" />
         </div>
         <div
           className="grid gap-4"
           style={{
-            gridTemplateColumns: columns ? `repeat(${columns}, minmax(0, 1fr))` : "repeat(auto-fit, minmax(300px, 1fr))",
+            gridTemplateColumns: `repeat(${limit}, minmax(0, 1fr))`,
           }}
         >
-          {Array.from({ length: columns ?? 3 }).map((_, index) => (
+          {Array.from({ length: limit }).map((_, index) => (
             <Skeleton
               key={index}
               className="w-full aspect-[5/4] rounded-2xl bg-card"
@@ -72,7 +78,7 @@ export const TrendingSection = () => {
         <div
           className="grid gap-4"
           style={{
-            gridTemplateColumns: columns ? `repeat(${columns}, minmax(0, 1fr))` : "repeat(auto-fit, minmax(300px, 1fr))",
+            gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
           }}
         >
           {items.map((item) => (

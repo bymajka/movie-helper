@@ -43,7 +43,6 @@ const FilterPanel = ({ className }: { className?: string }) => {
     toggleGenre,
     setMinRating,
     setMaxRating,
-    resetFilters,
     loadGenres,
   } = useFilterStore();
 
@@ -63,7 +62,7 @@ const FilterPanel = ({ className }: { className?: string }) => {
 
   useEffect(() => {
     loadGenres();
-  }, []);
+  }, [loadGenres]);
 
   const handleMinRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = parseFloat(e.target.value);

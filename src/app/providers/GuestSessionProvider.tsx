@@ -8,7 +8,7 @@ export const GuestSessionProvider = ({ children }: { children: React.ReactNode }
 
     useEffect(() => {
         initSession();
-    }, []);
+    }, [initSession]);
 
     return <>{children}</>;
 }

@@ -2,7 +2,7 @@
 
 import { useFilterStore } from "@/stores/filterStore";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { Button } from "@/shared/components/button";
 import { XIcon } from "lucide-react";
 
@@ -11,7 +11,7 @@ export const FiltersBar = () => {
     const router = useRouter();
     const { selectedMediaTypes, selectedGenres, rating_gte, rating_lte, toggleMediaType, toggleGenre, resetFilters } = useFilterStore();
 
-  const push = () => {
+  const push = useCallback(() => {
     const params = new URLSearchParams()
 
     if (selectedMediaTypes.size) {
@@ -25,9 +25,11 @@ export const FiltersBar = () => {
     params.set('rating_lte', String(rating_lte))
 
     router.push(`/discover?${params.toString()}`)
-  }
+  }, [selectedMediaTypes, selectedGenres, rating_gte, rating_lte, router])
 
-    useEffect(push, [selectedMediaTypes, selectedGenres, rating_gte, rating_lte])
+    useEffect(() => {
+      push();
+    }, [push])
 
     return (
         <div className="flex flex-row flex-wrap w-full md:gap-3 justify-start items-center">

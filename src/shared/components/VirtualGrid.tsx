@@ -94,7 +94,8 @@ export function VirtualGrid<T>({
     return () => {
       cancelled = true;
     };
-  }, dependencies);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...dependencies, fetchData]);
 
   const loadMore = useCallback(async () => {
     if (isLoading || !hasMore) return;
@@ -135,23 +136,18 @@ export function VirtualGrid<T>({
     overscan: 6,
   });
 
-  useEffect(() => {
-    const virtualItems = rowVirtualizer.getVirtualItems();
-    if (!virtualItems.length) return;
+  const virtualItems = rowVirtualizer.getVirtualItems();
+  const lastVirtualItem = virtualItems[virtualItems.length - 1];
 
-    const last = virtualItems[virtualItems.length - 1];
+  useEffect(() => {
+    if (!lastVirtualItem) return;
+
     const threshold = Math.max(0, rows.length - 5);
 
-    if (last.index >= threshold && hasMore && !isLoading) {
+    if (lastVirtualItem.index >= threshold && hasMore && !isLoading) {
       loadMore();
     }
-  }, [
-    rowVirtualizer.getVirtualItems(),
-    rows.length,
-    loadMore,
-    hasMore,
-    isLoading,
-  ]);
+  }, [lastVirtualItem, rows.length, loadMore, hasMore, isLoading]);
 
   if (error) {
     return (

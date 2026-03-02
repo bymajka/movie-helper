@@ -4,23 +4,25 @@ import { fetchSearchMulti, type SearchResponse } from "@/services/search";
 import type { TrendingItem } from "@/services/media";
 
 interface SearchPageProps {
-    searchParams: { query?: string; page?: string; }
+  searchParams: Promise<{ query?: string; page?: string }>;
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-    const q = searchParams.query?.trim();
-    if (!q) {
-        return <div>No search query provided</div>;
-    }
+  const params = await searchParams;
+  const q = params.query?.trim();
 
-    let data: SearchResponse;
-    try {
-        data = await fetchSearchMulti({ query: q, page: Number(searchParams.page) || 1 });
-    } catch {
-        return notFound();
-    }
+  if (!q) {
+    return <div>No search query provided</div>;
+  }
 
-    const results = data.results as TrendingItem[];
+  let data: SearchResponse;
+  try {
+    data = await fetchSearchMulti({ query: q, page: Number(params.page) || 1 });
+  } catch {
+    return notFound();
+  }
 
-    return <SearchView query={q} initialItems={results} />;
+  const results = data.results as TrendingItem[];
+
+  return <SearchView query={q} initialItems={results} />;
 }

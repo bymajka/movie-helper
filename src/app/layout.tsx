@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "@/shared/styles/globals.css";
-import { ThemeProvider, GuestSessionProvider } from "@/app/providers";
+import { Providers } from "@/app/providers";
 import { Montserrat } from "next/font/google";
 
 const montserrat = Montserrat({
@@ -24,16 +24,7 @@ export default function RootLayout({
         className={`${montserrat.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        <GuestSessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </GuestSessionProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

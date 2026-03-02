@@ -1,5 +1,16 @@
 // API Actions
-export { createGuestSession } from './api/actions';
+export {
+  createGuestSession,
+  createRequestToken,
+  createUserSession,
+  getAccountDetails,
+  deleteSession,
+} from './api/actions';
 
 // Types
-export type { GuestSession } from './types';
+export type {
+  GuestSession,
+  RequestToken,
+  UserSession,
+  UserAccount,
+} from './types';

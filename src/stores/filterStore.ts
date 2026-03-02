@@ -37,7 +37,7 @@ export interface FilterState {
     loadGenres:       () => Promise<void>
 }
 
-export const useFilterStore = create<FilterState>((set, get) => ({
+export const useFilterStore = create<FilterState>((set) => ({
     mediaTypes: MEDIA_TYPES,
     selectedMediaTypes: new Set(),
     availableGenres: [],
@@ -71,10 +71,10 @@ export const useFilterStore = create<FilterState>((set, get) => ({
         rating_lte: 10,
     }),
 
-    setSelectedMediaTypes: (mt: MediaType[]) => 
-        set((state) => ({
+    setSelectedMediaTypes: (mt: MediaType[]) =>
+        set({
             selectedMediaTypes: new Set(mt),
-        })),
+        }),
 
 
     loadGenres: async () => {
