@@ -1,13 +1,5 @@
-import { MovieSwiper } from "@/components/Hero/MovieSwiper";
-import { TrendingSection } from "@/components/ContentSection/TrendingSection/TrendingSection";
+import { HomeView } from "@/views";
 
 export default function Home() {
-  return (
-    <>
-      <MovieSwiper/>
-      <TrendingSection />
-    </>
-  );
-  }
-
-  
+  return <HomeView />;
+}

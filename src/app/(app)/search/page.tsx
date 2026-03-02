@@ -1,38 +1,55 @@
-import { ContentSection } from "@/components/ContentSection/ContentSection";
-import { fetchSearchMulti, TrendingItem } from "@/lib/tmdb";
-import { notFound } from "next/navigation";
-import { SearchVirtualGrid } from "@/components/Search/SearchVirtualGrid";
+import { redirect, notFound } from "next/navigation";
+import { isAxiosError } from "axios";
+import { SearchView } from "@/views";
+import { fetchSearchMulti, type SearchResult } from "@/services/search";
+import type { TrendingItem } from "@/services/media";
 
 interface SearchPageProps {
-    searchParams: {query?: string; page?: string;}
+  searchParams: Promise<{ query?: string | string[]; page?: string | string[] }>;
 }
 
-export const SearchPage = async ({searchParams}: SearchPageProps) => {
-    const q = searchParams.query?.trim();
-    if(!q) {
-        return <div>No found</div>
-    }
-
-    let data: { results: TrendingItem[] }
-    try {
-        data = await fetchSearchMulti({query: q, page: Number(searchParams.page) || 1})
-    } catch {
-        notFound();
-    }
-
-    const results = data.results
-
-    if(results.length === 0) {
-        return <div className="text-primary text-2xl font-semibold flex items-center justify-center h-full">
-            No results found 
-        </div>
-    }
-
-    return (
-        <ContentSection title={`Search results for “${q}”`} className="mt-6" withButton={false}>
-            <SearchVirtualGrid initialItems={results} query={q} />
-        </ContentSection>
-    )
+function mapSearchResultToTrendingItem(result: SearchResult): TrendingItem {
+  return {
+    id: result.id,
+    media_type: result.media_type,
+    title: result.title,
+    name: result.name,
+    backdrop_path: result.backdrop_path ?? null,
+    poster_path: result.poster_path ?? null,
+    genre_ids: result.genre_ids ?? [],
+    overview: result.overview ?? null,
+    vote_average: result.vote_average ?? null,
+  };
 }
 
-export default SearchPage;
+export default async function SearchPage({ searchParams }: SearchPageProps) {
+  const params = await searchParams;
+
+  const rawQuery = Array.isArray(params.query)
+    ? params.query[0]
+    : params.query;
+  const q = rawQuery?.trim();
+
+  if (!q) {
+    redirect("/discover?rating_gte=1&rating_lte=10");
+  }
+
+  const rawPage = Array.isArray(params.page) ? params.page[0] : params.page;
+  const parsedPage = Number.parseInt(rawPage ?? "", 10);
+  const page = Number.isNaN(parsedPage) || parsedPage <= 0 ? 1 : parsedPage;
+
+  let data;
+  try {
+    data = await fetchSearchMulti({ query: q, page });
+  } catch (err) {
+    console.error("Search fetch failed:", err);
+    if (isAxiosError(err) && err.response?.status === 404) {
+      return notFound();
+    }
+    throw err;
+  }
+
+  const results = data.results.map(mapSearchResultToTrendingItem);
+
+  return <SearchView query={q} initialItems={results} />;
+}
