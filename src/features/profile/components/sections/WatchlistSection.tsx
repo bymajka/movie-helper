@@ -1,30 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { useFavoriteMovies, useFavoriteTv } from "@/services/account";
-import { MediaGrid } from "./MediaGrid";
-import { MediaTypeSwitch, type MediaType } from "./MediaTypeSwitch";
+import { useWatchlistMovies, useWatchlistTv } from "@/services/account";
+import { MediaGrid } from "../MediaGrid";
+import { MediaTypeSwitch, type MediaType } from "../MediaTypeSwitch";
 
-interface FavoritesSectionProps {
+interface WatchlistSectionProps {
   accountId: number | null;
   sessionId: string | null;
   expanded?: boolean;
   onViewAll?: () => void;
 }
 
-export function FavoritesSection({
+export function WatchlistSection({
   accountId,
   sessionId,
   expanded,
   onViewAll,
-}: FavoritesSectionProps) {
+}: WatchlistSectionProps) {
   const [mediaType, setMediaType] = useState<MediaType>("movies");
 
-  const { data: moviesData, loading: moviesLoading } = useFavoriteMovies(
+  const { data: moviesData, loading: moviesLoading } = useWatchlistMovies(
     accountId,
     sessionId,
   );
-  const { data: tvData, loading: tvLoading } = useFavoriteTv(
+  const { data: tvData, loading: tvLoading } = useWatchlistTv(
     accountId,
     sessionId,
   );
@@ -33,18 +33,20 @@ export function FavoritesSection({
   const items = isMovies ? moviesData?.results : tvData?.results;
   const loading = isMovies ? moviesLoading : tvLoading;
   const emptyMessage = isMovies
-    ? "No favorite movies yet."
-    : "No favorite series yet.";
+    ? "No movies in watchlist yet."
+    : "No series in watchlist yet.";
 
   return (
     <MediaGrid
-      title="My Favorites"
+      title="My Watchlist"
       items={items}
       loading={loading}
       emptyMessage={emptyMessage}
       expanded={expanded}
       onViewAll={onViewAll}
-      headerExtra={<MediaTypeSwitch value={mediaType} onChange={setMediaType} />}
+      headerExtra={
+        <MediaTypeSwitch value={mediaType} onChange={setMediaType} />
+      }
     />
   );
 }
