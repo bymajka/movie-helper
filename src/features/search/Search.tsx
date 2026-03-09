@@ -57,7 +57,7 @@ export const Search = ({ placeholder, className }: SearchProps) => {
         value={q}
         placeholder={placeholder}
         onChange={handleChange}
-        className={`${className} bg-card! flex items-center gap-2 rounded-full px-5 py-[18px] h-full`}
+        className="bg-card! border-0 focus-visible:ring-0 flex items-center gap-2 rounded-full px-5 py-[18px] h-full"
       />
       {!q && (
         <SearchIcon className="w-6 h-6 absolute right-5 top-1/2 -translate-y-1/2 text-primary" />

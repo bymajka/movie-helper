@@ -4,7 +4,6 @@ export const createListSchema = yup.object({
   name: yup
     .string()
     .required("Name is required")
-    .min(1, "Name is required")
     .max(100, "Name must be at most 100 characters"),
   description: yup
     .string()

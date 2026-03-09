@@ -145,9 +145,9 @@ export function AddItemSearch({
                     key={item.id}
                     value={`${item.id}-${item.title}`}
                     className="flex items-center gap-5 py-4 px-6 cursor-pointer"
-                    disabled={inList}
+                    disabled={inList || addingId !== null}
                     onSelect={() => {
-                      if (!inList && !isAdding) {
+                      if (!inList && addingId === null) {
                         addItem(item);
                       }
                     }}

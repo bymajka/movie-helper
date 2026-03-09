@@ -47,7 +47,10 @@ export function CreateListModal({
   });
 
   const onSubmit = async (data: CreateListFormData) => {
-    if (!sessionId) return;
+    if (!sessionId) {
+      setError("You must be logged in to create a list");
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -120,7 +123,7 @@ export function CreateListModal({
           {error && <p className="text-sm text-destructive">{error}</p>}
 
           <DialogFooter>
-            <Button type="submit" disabled={loading || !isValid}>
+            <Button type="submit" disabled={loading || !isValid || !sessionId}>
               {loading ? "Creating..." : "Create List"}
             </Button>
           </DialogFooter>

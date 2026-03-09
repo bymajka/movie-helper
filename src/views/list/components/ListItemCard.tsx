@@ -6,12 +6,13 @@ import { X } from "lucide-react";
 import { Rating, FallbackCardImage } from "@/shared/components";
 import { TMDB_BASE_IMG_URL_W500 } from "@/services/media";
 import { ROUTES } from "@/shared/router";
+import { extractYear } from "@/shared/utils";
 import type { ListItem } from "@/services/account";
 
 interface ListItemCardProps {
   item: ListItem;
-  onRemove: (itemId: number) => void;
-  isRemoving: boolean;
+  onRemove?: (itemId: number) => void;
+  isRemoving?: boolean;
 }
 
 export function ListItemCard({
@@ -19,9 +20,7 @@ export function ListItemCard({
   onRemove,
   isRemoving,
 }: ListItemCardProps) {
-  const year = item.release_date
-    ? new Date(item.release_date).getFullYear()
-    : null;
+  const year = item.release_date ? extractYear(item.release_date) : null;
 
   return (
     <div className="group cursor-pointer relative">
@@ -40,9 +39,9 @@ export function ListItemCard({
             <FallbackCardImage />
           )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300" />
 
-          <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+          <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 group-focus-within:translate-y-0 transition-transform duration-300">
             <div className="flex items-center justify-between">
               <Rating rating={item.vote_average} />
               {year && <span className="text-white/80 text-xs">{year}</span>}
@@ -54,18 +53,20 @@ export function ListItemCard({
         </div>
       </Link>
 
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          onRemove(item.id);
-        }}
-        disabled={isRemoving}
-        className="absolute top-2 right-2 p-1 rounded-full bg-black/40 hover:bg-transparent cursor-pointer text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 disabled:opacity-50"
-        aria-label="Remove from list"
-      >
-        <X className="w-4 h-4" />
-      </button>
+      {onRemove && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onRemove(item.id);
+          }}
+          disabled={isRemoving}
+          className="absolute top-2 right-2 p-1 rounded-full bg-black/40 hover:bg-transparent cursor-pointer text-white opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100 focus-visible:opacity-100 transition-opacity duration-300 disabled:opacity-50"
+          aria-label="Remove from list"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      )}
     </div>
   );
 }

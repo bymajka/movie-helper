@@ -66,22 +66,24 @@ export function ListView({ id }: ListViewProps) {
               </span>
             </div>
 
-            <div className="flex items-center gap-4">
-              <AddItemSearch
-                listId={id}
-                sessionId={sessionId}
-                existingItemIds={data.items.map((item) => item.id)}
-                onItemAdded={refetch}
-              />
-              <Button
-                variant="ghost"
-                onClick={() => setIsDeleteDialogOpen(true)}
-                className="flex items-center gap-2 w-fit hover:!bg-destructive"
-              >
-                <Trash2 className="w-4 h-4" />
-                Delete List
-              </Button>
-            </div>
+            {sessionId && (
+              <div className="flex items-center gap-4">
+                <AddItemSearch
+                  listId={id}
+                  sessionId={sessionId}
+                  existingItemIds={data.items.map((item) => item.id)}
+                  onItemAdded={refetch}
+                />
+                <Button
+                  variant="ghost"
+                  onClick={() => setIsDeleteDialogOpen(true)}
+                  className="flex items-center gap-2 w-fit hover:!bg-destructive"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete List
+                </Button>
+              </div>
+            )}
           </div>
         </Card>
 
@@ -97,7 +99,7 @@ export function ListView({ id }: ListViewProps) {
               <ListItemCard
                 key={item.id}
                 item={item}
-                onRemove={handleRemoveItem}
+                onRemove={sessionId ? handleRemoveItem : undefined}
                 isRemoving={removingItemId === item.id}
               />
             ))}

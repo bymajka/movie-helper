@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { FallbackCardImage } from "@/shared/components/FallbackCardImage";
 import { Rating } from "@/shared/components/Rating";
+import { extractYear } from "@/shared/utils";
 import { TMDB_BASE_IMG_URL_W500 } from "@/services/media";
 
 interface PosterCardProps {
@@ -18,7 +19,7 @@ export const PosterCard = ({
   releaseDate,
   className,
 }: PosterCardProps) => {
-  const year = releaseDate ? new Date(releaseDate).getFullYear() : null;
+  const year = releaseDate ? extractYear(releaseDate) : null;
 
   return (
     <div className={`group cursor-pointer ${className}`}>

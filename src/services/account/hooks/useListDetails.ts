@@ -9,25 +9,35 @@ export const useListDetails = (listId: number | null) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const isMountedRef = useRef(true);
+  const requestIdRef = useRef(0);
 
   const fetchData = useCallback(() => {
     if (!listId) {
+      setData(null);
       setLoading(false);
+      setError(null);
       return;
     }
 
+    const currentRequestId = ++requestIdRef.current;
     setLoading(true);
     setError(null);
 
     fetchListDetails({ listId })
       .then((res) => {
-        if (isMountedRef.current) setData(res);
+        if (isMountedRef.current && requestIdRef.current === currentRequestId) {
+          setData(res);
+        }
       })
       .catch((err) => {
-        if (isMountedRef.current) setError(err.message);
+        if (isMountedRef.current && requestIdRef.current === currentRequestId) {
+          setError(err.message);
+        }
       })
       .finally(() => {
-        if (isMountedRef.current) setLoading(false);
+        if (isMountedRef.current && requestIdRef.current === currentRequestId) {
+          setLoading(false);
+        }
       });
   }, [listId]);
 

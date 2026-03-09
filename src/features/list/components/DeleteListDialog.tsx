@@ -65,7 +65,7 @@ export function DeleteListDialog({
           <Button
             variant="destructive"
             onClick={handleDelete}
-            disabled={isDeleting}
+            disabled={isDeleting || !sessionId}
           >
             {isDeleting ? "Deleting..." : "Delete"}
           </Button>
