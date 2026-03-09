@@ -10,6 +10,9 @@ export * from "./input";
 export * from "./separator";
 export * from "./skeleton";
 export * from "./toggle";
+export * from "./dialog";
+export * from "./command";
+export * from "./sonner";
 
 // Custom shared components
 export { default as Logo } from "./Logo";

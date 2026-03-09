@@ -9,13 +9,18 @@ import {
   Breadcrumb,
 } from "@/shared/components";
 import { TMDB_BASE_IMG_URL_W500 } from "@/services/media";
-import { FavoritesSection, WatchlistSection } from "@/features/profile";
+import {
+  FavoritesSection,
+  WatchlistSection,
+  ListsSection,
+} from "@/features/profile";
 
-type ProfileSection = "favorites" | "watchlist";
+type ProfileSection = "favorites" | "watchlist" | "lists";
 
 const SECTION_TITLES: Record<ProfileSection, string> = {
   favorites: "My Favorites",
   watchlist: "My Watchlist",
+  lists: "My Lists",
 };
 
 export function ProfileView() {
@@ -63,6 +68,14 @@ export function ProfileView() {
             expanded
           />
         )}
+
+        {expandedSection === "lists" && (
+          <ListsSection
+            accountId={accountId}
+            sessionId={sessionId}
+            expanded
+          />
+        )}
       </>
     );
   }
@@ -89,6 +102,11 @@ export function ProfileView() {
         accountId={accountId}
         sessionId={sessionId}
         onViewAll={() => handleViewAll("watchlist")}
+      />
+      <ListsSection
+        accountId={accountId}
+        sessionId={sessionId}
+        onViewAll={() => handleViewAll("lists")}
       />
     </>
   );
