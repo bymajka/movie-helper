@@ -57,6 +57,7 @@ export function AddItemSearch({
   useEffect(() => {
     if (!debouncedQuery) {
       setResults([]);
+      setIsSearching(false);
       return;
     }
 
@@ -81,6 +82,7 @@ export function AddItemSearch({
 
     return () => {
       cancelled = true;
+      setIsSearching(false);
     };
   }, [debouncedQuery]);
 
